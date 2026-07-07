@@ -1,0 +1,12 @@
+This File comes with a PSD-File, to  customize the Gaming Console to your own liking.
+
+Switch Sims4 Model Conversion Orignal 
+from RedHead: https://www.redheadsims-cc.com/2020/09/nintendo-switch-functional-accessory.html
+
+If you want to change the Image on the Switch, 
+without Blender watch this: https://www.youtube.com/watch?v=1NJ1ZSH5NXY 
+(German Tutorial only but maybe you can follow the Steps just by watching)
+
+
+Recommend using AddonProps to bring it into your single Player
+**Not recommended for Server!**

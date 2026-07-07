@@ -1,0 +1,7 @@
+Offset X: Moves the console left/right.
+Offset Y: Moves the console forward/backward.
+Offset Z: Moves the console up/down.
+Rotation X (Pitch): Rotates the console up/down.
+Rotation Y (Roll): Tilts the console left/right.
+Rotation Z (Yaw): Spins the console clockwise/counter-clockwise.
+Reset Defaults: Resets all position and rotation offsets back to their default values
