@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Handheld OS</title>
+    <!-- Google Fonts: Retro gaming pixel font & clean sans-serif for UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="console-container" style="display: none;">
+        <div class="handheld-device theme-custom-casing">
+            
+            <!-- Left Side Controller Grip -->
+            <div class="controller-grip grip-left">
+                <!-- Left Trigger Shoulder Buttons -->
+                <div class="shoulder-btn btn-l">L</div>
+                <div class="shoulder-btn btn-zl">ZL</div>
+
+                <div class="analog-stick stick-left">
+                    <div class="stick-cap"></div>
+                </div>
+
+                <!-- D-pad -->
+                <div class="dpad">
+                    <div class="dpad-btn dpad-up" data-key="ArrowUp">▲</div>
+                    <div class="dpad-btn dpad-right" data-key="ArrowRight">▶</div>
+                    <div class="dpad-btn dpad-down" data-key="ArrowDown">▼</div>
+                    <div class="dpad-btn dpad-left" data-key="ArrowLeft">◀</div>
+                    <div class="dpad-center"></div>
+                </div>
+
+                <!-- Minus pill button & Screenshot button -->
+                <div class="system-btn minus-btn" data-key="-"></div>
+                <div class="system-btn capture-btn"></div>
+            </div>
+
+            <!-- Screen Area -->
+            <div class="screen-wrapper">
+                <div class="screen-bezel">
+                    <div class="bezel-logo">ZWITCH</div>
+                    <div class="console-screen">
+                        
+                        <!-- CRT Scanline / Glare Overlay -->
+                        <div class="crt-overlay"></div>
+                        <div class="screen-glare"></div>
+
+                        <!-- Boot Terminal Screen -->
+                        <div id="boot-screen" class="screen-overlay">
+                            <div class="terminal-content">
+                                <div class="terminal-text" id="boot-logs"></div>
+                                <div class="boot-logo-wrapper" id="boot-logo-zone" style="display:none;">
+                                    <div class="pixel-art-logo">🎮</div>
+                                    <div class="boot-title">TDTMEDIA CONSOLE</div>
+                                    <div class="boot-subtitle">OS v42.0 Stable Build</div>
+                                    <div class="boot-loader"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main OS Dashboard -->
+                        <div id="dashboard-screen" style="display: none;">
+                            <!-- Top Info Bar (Switch Style) -->
+                            <div class="top-status-bar">
+                                <div class="status-left">
+                                    <div class="profile-avatar">👾</div>
+                                    <span class="profile-name">Player 1</span>
+                                </div>
+                                <div class="status-right">
+                                    <span class="status-icon">📶</span>
+                                    <span class="status-icon">🎮</span>
+                                    <span class="status-time" id="status-clock">12:00 PM</span>
+                                    <span class="status-battery">🔋 100%</span>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Character/System Backdrop -->
+                            <div class="character-backdrop" id="system-backdrop"></div>
+
+                            <!-- Main Layout (No sidebar, pure content panels) -->
+                            <div class="main-layout">
+                                <div class="content-panel">
+                                    <!-- HOME SECTION: System Select Carousel -->
+                                    <div id="panel-home" class="panel-section active">
+                                        <div class="carousel-container">
+                                            <h2 class="section-title">Select System</h2>
+                                            <div class="system-carousel" id="system-carousel-view">
+                                                <div class="system-card active" data-system="nes">
+                                                    <div class="system-card-icon"><img src="nes_console.png" alt="NES" /></div>
+                                                    <div class="system-card-title">NES</div>
+                                                    <div class="system-card-sub">Nintendo</div>
+                                                </div>
+                                                <div class="system-card" data-system="snes">
+                                                    <div class="system-card-icon"><img src="snes_console.jpg" alt="SNES" /></div>
+                                                    <div class="system-card-title">SNES</div>
+                                                    <div class="system-card-sub">Super Nintendo</div>
+                                                </div>
+                                                <div class="system-card" data-system="sega">
+                                                    <div class="system-card-icon"><img src="sega_console.png" alt="Genesis" /></div>
+                                                    <div class="system-card-title">GENESIS</div>
+                                                    <div class="system-card-sub">Sega Mega Drive</div>
+                                                </div>
+                                                <div class="system-card" data-system="gb">
+                                                    <div class="system-card-icon"><img src="gb_console.png" alt="GB" /></div>
+                                                    <div class="system-card-title">GAME BOY</div>
+                                                    <div class="system-card-sub">Nintendo GB</div>
+                                                </div>
+                                                <div class="system-card" data-system="gbc">
+                                                    <div class="system-card-icon"><img src="gba_console.png" alt="GBA" /></div>
+                                                    <div class="system-card-title">GBA / GBC</div>
+                                                    <div class="system-card-sub">Game Boy Advance</div>
+                                                </div>
+                                            </div>
+                                            <div class="system-details" id="system-details-view">
+                                                <div class="system-full-name">Nintendo Entertainment System</div>
+                                                <div class="system-game-count">2 Games Available</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- GAMES LIBRARY SECTION: Horizontal Game Cards -->
+                                    <div id="panel-games" class="panel-section">
+                                        <div class="library-container">
+                                            <div class="library-header">
+                                                <h2 class="section-title" id="library-title">Game Library</h2>
+                                                <span class="system-badge-filter" id="active-filter-badge">All Systems</span>
+                                            </div>
+                                            
+                                            <!-- Horizontal Game Carousel -->
+                                            <div class="games-horizontal-carousel" id="games-carousel-view">
+                                                <!-- Populated dynamically via script.js -->
+                                            </div>
+
+                                            <!-- Selected Game Details Area (Switch Style) -->
+                                            <div class="game-details-bar" id="game-details-bar-view">
+                                                <div class="detail-text-info">
+                                                    <div class="detail-header-row">
+                                                        <h3 class="detail-title" id="preview-title">Select Game</h3>
+                                                        <div class="detail-tags">
+                                                            <span class="tag-platform" id="preview-platform">-</span>
+                                                            <span class="tag-genre" id="preview-genre">-</span>
+                                                        </div>
+                                                    </div>
+                                                    <p class="detail-desc" id="preview-desc">Choose a game from the list to play.</p>
+                                                </div>
+                                                <button class="launch-btn" id="btn-launch-game">Launch Game</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SETTINGS SECTION -->
+                                    <div id="panel-settings" class="panel-section">
+                                        <h2 class="panel-title">System Settings</h2>
+                                        <div class="settings-list">
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">CRT Scanlines & Flicker Filter</div>
+                                                    <div class="setting-desc">Simulate a vintage tube screen experience</div>
+                                                </div>
+                                                <div class="setting-control">
+                                                    <label class="switch-toggle">
+                                                        <input type="checkbox" id="setting-crt" checked>
+                                                        <span class="switch-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">System UI Audio</div>
+                                                    <div class="setting-desc">Navigational beep sounds volume</div>
+                                                </div>
+                                                <div class="setting-control">
+                                                    <input type="range" id="setting-volume" min="0" max="100" value="50" class="slider-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Console Body Color Theme</div>
+                                                    <div class="setting-desc">Change the physical casing aesthetic</div>
+                                                </div>
+                                                <div class="setting-control">
+                                                    <select id="setting-theme" class="select-control">
+                                                        <option value="custom-casing" selected>Custom Red Tech 1</option>
+                                                        <option value="custom-casing-2">Custom Red Tech 2</option>
+                                                        <option value="custom-casing-3">Custom Red Tech 3</option>
+                                                        <option value="custom-casing-4">Custom Super Mario</option>
+                                                        <option value="custom-casing-5">Custom Blue Tech 1</option>
+                                                        <option value="custom-casing-6">Custom Blue Tech 2</option>
+                                                        <option value="custom-casing-7">Custom Blue Tech 3</option>
+                                                        <option value="custom-casing-8">Custom Zelda</option>
+                                                        <option value="custom-casing-9">Custom Sticker Bomb 1</option>
+                                                        <option value="custom-casing-10">Custom Sticker Bomb 2</option>
+                                                        <option value="custom-casing-11">Custom Princess Peach</option>
+                                                        <option value="classic-gray">Classic Retro Gray</option>
+                                                        <option value="atomic-purple">Atomic Purple (Transparent)</option>
+                                                        <option value="cyber-pink">Cyberpunk Neon</option>
+                                                        <option value="glacier-white">Glacier White</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                     <div class="setting-name">Default Keyboard Keybindings</div>
+                                                     <div class="setting-desc">D-Pad: Arrows | A: X | B: Z | X: S | Y: A | L: Q | R: W | Start: Enter | Select: Shift</div>
+                                                 </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                     <div class="setting-name">Custom Key & Controller Mapping</div>
+                                                     <div class="setting-desc">To bind your own keys or controller buttons, launch any game, click the green <strong>Settings Menu</strong> button in the top-right (or press <strong>F1</strong>), and configure Player 1 controls. Custom bindings are saved automatically!</div>
+                                                 </div>
+                                            </div>
+
+                                            <!-- Prop position calibration section -->
+                                            <div class="settings-group-header">
+                                                Prop Position Calibration
+                                            </div>
+                                            <div style="margin-top: -6px; margin-bottom: 12px; color: #ffaa00; padding: 0 24px; font-size: 11px; line-height: 1.3;">
+                                                Press <strong>TAB</strong> at any time to toggle Camera Look so you can rotate around your character.
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Offset X</div>
+                                                    <div class="setting-desc">Left / Right positioning</div>
+                                                </div>
+                                                <div class="setting-control offset-control">
+                                                    <span class="offset-val" id="val-offset-x">0.14</span>
+                                                    <input type="range" id="setting-offset-x" min="-1.5" max="1.5" step="0.01" value="0.14" class="slider-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Offset Y</div>
+                                                    <div class="setting-desc">Forward / Backward positioning</div>
+                                                </div>
+                                                <div class="setting-control offset-control">
+                                                    <span class="offset-val" id="val-offset-y">-0.01</span>
+                                                    <input type="range" id="setting-offset-y" min="-1.5" max="1.5" step="0.01" value="-0.01" class="slider-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Offset Z</div>
+                                                    <div class="setting-desc">Up / Down positioning</div>
+                                                </div>
+                                                <div class="setting-control offset-control">
+                                                    <span class="offset-val" id="val-offset-z">-0.03</span>
+                                                    <input type="range" id="setting-offset-z" min="-1.5" max="1.5" step="0.01" value="-0.03" class="slider-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Rotation X</div>
+                                                    <div class="setting-desc">Pitch angle</div>
+                                                </div>
+                                                <div class="setting-control offset-control">
+                                                    <span class="offset-val" id="val-offset-rx">-65°</span>
+                                                    <input type="range" id="setting-offset-rx" min="-360" max="360" step="1" value="-65" class="slider-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Rotation Y</div>
+                                                    <div class="setting-desc">Roll angle</div>
+                                                </div>
+                                                <div class="setting-control offset-control">
+                                                    <span class="offset-val" id="val-offset-ry">180°</span>
+                                                    <input type="range" id="setting-offset-ry" min="-360" max="360" step="1" value="180" class="slider-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Rotation Z</div>
+                                                    <div class="setting-desc">Yaw angle</div>
+                                                </div>
+                                                <div class="setting-control offset-control">
+                                                    <span class="offset-val" id="val-offset-rz">75°</span>
+                                                    <input type="range" id="setting-offset-rz" min="-360" max="360" step="1" value="75" class="slider-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="setting-row">
+                                                <div class="setting-info">
+                                                    <div class="setting-name">Reset Position</div>
+                                                    <div class="setting-desc">Revert to default prop offsets</div>
+                                                </div>
+                                                <div class="setting-control">
+                                                    <button class="browse-btn" id="btn-reset-offsets" style="margin-bottom: 0; padding: 6px 12px; font-size: 11px;">Reset Defaults</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Quick Action Navigation Bar (Switch Home Menu Style) -->
+                            <div class="bottom-action-bar">
+                                <div class="action-bar-icons">
+                                    <div class="nav-icon-wrapper active" data-target="home">
+                                        <div class="nav-circle-icon">🏠</div>
+                                    </div>
+                                    <div class="nav-icon-wrapper" data-target="games">
+                                        <div class="nav-circle-icon">🎮</div>
+                                    </div>
+                                    <div class="nav-icon-wrapper" data-target="settings">
+                                        <div class="nav-circle-icon">⚙️</div>
+                                    </div>
+                                    <div class="nav-icon-wrapper shutdown-item" data-target="shutdown">
+                                        <div class="nav-circle-icon">⏻</div>
+                                    </div>
+                                </div>
+                                <div class="action-bar-caption" id="nav-bar-caption">System Menu</div>
+                                <div class="control-hints">
+                                    <span><span class="hint-btn">Ⓐ</span> Select</span>
+                                    <span><span class="hint-btn">Ⓑ</span> Back</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Gameplay Emulator Iframe Container -->
+                        <div id="gameplay-screen" style="display: none;">
+                            <!-- The iframe runs here dynamically -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side Controller Grip -->
+            <div class="controller-grip grip-right">
+                <!-- Right Trigger Shoulder Buttons -->
+                <div class="shoulder-btn btn-r">R</div>
+                <div class="shoulder-btn btn-zr">ZR</div>
+
+                <!-- Action buttons (A B X Y) in Nintendo Layout -->
+                <div class="action-buttons">
+                    <div class="action-btn btn-x" data-key="s">X</div>
+                    <div class="action-btn btn-y" data-key="a">Y</div>
+                    <div class="action-btn btn-a" data-key="x">A</div>
+                    <div class="action-btn btn-b" data-key="z">B</div>
+                </div>
+
+                <div class="analog-stick stick-right">
+                    <div class="stick-cap"></div>
+                </div>
+
+                <!-- Plus button & Home button -->
+                <div class="system-btn plus-btn" data-key="+"></div>
+                <div class="system-btn home-btn" id="console-home-btn"></div>
+                
+                <!-- Status Power LED -->
+                <div class="power-led" id="led-indicator"></div>
+                <div class="speaker-grille">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

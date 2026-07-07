@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emulator Sandboxed Frame</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            font-family: monospace;
+        }
+        #game {
+            width: 100vw;
+            height: 100vh;
+        }
+        .controls-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #exit-btn {
+            background-color: rgba(220, 53, 69, 0.85);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            opacity: 0.1; /* Very subtle so it doesn't distract from gameplay */
+        }
+        #exit-btn:hover {
+            opacity: 1.0;
+            background-color: rgb(220, 53, 69);
+            transform: scale(1.05);
+        }
+        #menu-btn {
+            background-color: rgba(40, 167, 69, 0.85);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            opacity: 0.1; /* Very subtle so it doesn't distract from gameplay */
+        }
+        #menu-btn:hover {
+            opacity: 1.0;
+            background-color: rgb(40, 167, 69);
+            transform: scale(1.1) rotate(45deg); /* Modern hover effect rotating the cog slightly */
+        }
+        #menu-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
+        /* Hide default EmulatorJS control bar */
+        .ejs_control_bar {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls-overlay">
+        <button id="menu-btn" title="Settings Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        </button>
+        <button id="exit-btn">Exit Game</button>
+    </div>
+    <div id="game"></div>
+
+    <script>
+        // Get URL Query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const romUrl = urlParams.get('rom');
+        const core = urlParams.get('core');
+        const resource = urlParams.get('resource');
+
+        if (!romUrl || !core) {
+            document.write('<div style="color:red;padding:20px;text-align:center;">Error: Missing ROM file or core type parameter!</div>');
+        } else {
+            // Clear any corrupted EmulatorJS settings saved from previous sessions
+            // (e.g. bad controller config saved via the in-game settings menu)
+            try {
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith('EJS_') || key.startsWith('emulatorjs')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+            } catch(e) {}
+
+            // Set EmulatorJS settings
+            window.EJS_player = '#game';
+            window.EJS_gameUrl = romUrl;
+            window.EJS_core = core;
+            window.EJS_pathtodata = 'emulatorjs/';
+            window.EJS_startOnLoaded = true;
+            
+            
+            // Note: EJS_keyboardControls and EJS_defaultControls are intentionally NOT set here.
+            // EmulatorJS reads defaultControllers as a nested array internally (defaultControllers[0][0]),
+            // and passing a plain object with numeric keys causes the 'Cannot read properties of undefined'
+            // crash in emulator.min.js. EmulatorJS built-in defaults work correctly without these overrides.
+
+
+            // Disable auto language detection - prevents fetching en-US.json which crashes emulator.min.js
+            // The condition in loader.js fires when systemLang is set AND EJS_disableAutoLang !== false
+            // Setting it to false explicitly suppresses the auto-lang fetch
+            window.EJS_disableAutoLang = false;
+
+            // Set GBA bios if needed
+            if (core === 'gba') {
+                window.EJS_biosUrl = `../bios/gba_bios.bin`;
+            }
+
+            // Load loader script dynamically
+            const loader = document.createElement('script');
+            loader.src = 'emulatorjs/loader.js';
+            loader.onload = () => {
+                console.log('EmulatorJS loaded successfully for core: ' + core);
+            };
+            document.body.appendChild(loader);
+        }
+
+        // Handle exit button
+        document.getElementById('exit-btn').addEventListener('click', () => {
+            window.parent.postMessage({ action: 'exitGame' }, '*');
+        });
+
+        // Prevent all contextmenu (right-clicks) from showing the menu unless triggered by the menu button
+        window.addEventListener('contextmenu', (e) => {
+            if (!e.fromMenuButton) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
+
+        // Helper function to dispatch untrusted contextmenu event to show menu programmatically
+        function toggleEmulatorMenu() {
+            const gameEl = document.getElementById('game');
+            if (gameEl) {
+                const event = new MouseEvent('contextmenu', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window
+                });
+                event.fromMenuButton = true; // Set custom flag
+                
+                // Define client-relative and element-relative offset coordinates for the center of the screen
+                const rect = gameEl.getBoundingClientRect();
+                const x = rect.width / 2;
+                const y = rect.height / 2;
+                
+                Object.defineProperty(event, 'offsetX', { get: () => x, configurable: true });
+                Object.defineProperty(event, 'offsetY', { get: () => y, configurable: true });
+                Object.defineProperty(event, 'clientX', { get: () => rect.left + x, configurable: true });
+                Object.defineProperty(event, 'clientY', { get: () => rect.top + y, configurable: true });
+                
+                gameEl.dispatchEvent(event);
+            }
+        }
+
+        // Toggle menu on button click
+        document.getElementById('menu-btn').addEventListener('click', toggleEmulatorMenu);
+
+        // Intercept keys like ESC and F1 inside the iframe
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                window.parent.postMessage({ action: 'exitGame' }, '*');
+            } else if (e.key === 'F1') {
+                e.preventDefault();
+                toggleEmulatorMenu();
+            }
+        });
+
+        // Receive forwarded keyboard events from the parent window
+        window.addEventListener('message', (event) => {
+            if (event.data && (event.data.type === 'keydown' || event.data.type === 'keyup')) {
+                const target = document.activeElement || document.body;
+                
+                const keyboardEvent = new KeyboardEvent(event.data.type, {
+                    key: event.data.key,
+                    code: event.data.code,
+                    shiftKey: event.data.shiftKey,
+                    ctrlKey: event.data.ctrlKey,
+                    altKey: event.data.altKey,
+                    metaKey: event.data.metaKey,
+                    bubbles: true,
+                    cancelable: true
+                });
+                
+                Object.defineProperty(keyboardEvent, 'keyCode', {
+                    get: () => event.data.keyCode,
+                    configurable: true
+                });
+                Object.defineProperty(keyboardEvent, 'which', {
+                    get: () => event.data.which,
+                    configurable: true
+                });
+                
+                target.dispatchEvent(keyboardEvent);
+                window.dispatchEvent(keyboardEvent);
+                document.dispatchEvent(keyboardEvent);
+                
+                const gameEl = document.getElementById('game');
+                if (gameEl) {
+                    gameEl.dispatchEvent(keyboardEvent);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1539 @@
+/* --- Reset & Base Variables --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent; /* Overlay on top of GTA V */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Outfit', sans-serif;
+    color: #f0f0f0;
+}
+
+#console-container {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    perspective: 1200px;
+    transform-origin: bottom right;
+    animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8) rotateX(15deg);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+/* --- Handheld Console Chassis --- */
+.handheld-device {
+    width: 1060px;
+    height: 520px;
+    border-radius: 40px;
+    display: flex;
+    position: relative;
+    padding: 15px;
+    box-shadow: 
+        0 25px 50px rgba(0,0,0,0.6), 
+        inset 0 2px 2px rgba(255,255,255,0.2),
+        inset 0 -4px 10px rgba(0,0,0,0.4);
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* --- Theme 1: Classic Retro Gray (Default) --- */
+.theme-classic-gray {
+    background-color: #8b939c; /* Classic retro gray plastic */
+    border: 5px solid #6b727a;
+}
+.theme-classic-gray .controller-grip { background-color: #8b939c; }
+.theme-classic-gray .action-btn { background-color: #2e3033; color: #e6e6e6; border: 2px solid #1c1d1f; }
+.theme-classic-gray .dpad-btn { background-color: #2e3033; border: 1px solid #1c1d1f; }
+.theme-classic-gray .analog-stick .stick-cap { background: radial-gradient(circle, #52575e 30%, #292b2e 90%); }
+
+/* --- Theme 2: Translucent Atomic Purple --- */
+.theme-atomic-purple {
+    background: rgba(133, 90, 186, 0.75); /* Translucent purple */
+    backdrop-filter: blur(8px);
+    border: 5px solid rgba(106, 62, 160, 0.85);
+    /* PCB backing texture simulation using linear gradients */
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(20, 200, 100, 0.15) 5px, transparent 6px),
+        radial-gradient(circle at 80% 70%, rgba(200, 200, 20, 0.15) 10px, transparent 12px),
+        linear-gradient(60deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+        linear-gradient(120deg, rgba(0,0,0,0.15) 15%, transparent 15%);
+    box-shadow: 
+        0 25px 50px rgba(0,0,0,0.7),
+        inset 0 0 40px rgba(255, 255, 255, 0.15);
+}
+.theme-atomic-purple .controller-grip { background-color: transparent; }
+.theme-atomic-purple .action-btn { background-color: rgba(46, 48, 51, 0.9); color: #fff; border: 2px solid #111; }
+.theme-atomic-purple .dpad-btn { background-color: rgba(46, 48, 51, 0.9); }
+.theme-atomic-purple .analog-stick .stick-cap { background: radial-gradient(circle, #52575e 30%, #1c1d1f 90%); }
+
+/* --- Theme 3: Cyberpunk Neon --- */
+.theme-cyber-pink {
+    background-color: #121214;
+    border: 5px solid #ff0055;
+    background-image: radial-gradient(rgba(255, 0, 85, 0.15) 1px, transparent 0);
+    background-size: 16px 16px;
+    box-shadow: 
+        0 0 30px rgba(255, 0, 85, 0.3),
+        0 25px 50px rgba(0,0,0,0.8);
+}
+.theme-cyber-pink .controller-grip { background-color: transparent; }
+.theme-cyber-pink .action-btn { background-color: #ff0055; color: #ffffff; border: 2px solid #00f0ff; text-shadow: 0 0 5px #fff; }
+.theme-cyber-pink .action-btn:nth-child(even) { background-color: #00f0ff; color: #121214; border: 2px solid #ff0055; }
+.theme-cyber-pink .dpad-btn { background-color: #202024; border: 2px solid #ff0055; color: #ff0055; }
+.theme-cyber-pink .analog-stick .stick-cap { background: radial-gradient(circle, #2d2d30 30%, #050505 90%); border: 2px solid #ff0055; }
+
+/* --- Theme 4: Glacier White (Neon Joysticks) --- */
+.theme-glacier-white {
+    background-color: #eceff1;
+    border: 5px solid #cfd8dc;
+}
+.theme-glacier-white .controller-grip { background-color: #eceff1; }
+.theme-glacier-white .action-btn { background-color: #ffffff; color: #37474f; border: 2px solid #b0bec5; }
+.theme-glacier-white .dpad-btn { background-color: #ffffff; border: 1px solid #b0bec5; color: #37474f; }
+.theme-glacier-white .grip-left .analog-stick .stick-cap { background: radial-gradient(circle, #00b0ff 30%, #0081cb 90%); } /* Neon Blue Left Joystick */
+.theme-glacier-white .grip-right .analog-stick .stick-cap { background: radial-gradient(circle, #ff1744 30%, #b2002d 90%); } /* Neon Red Right Joystick */
+
+/* --- Theme 5: Custom Red Tech Casing --- */
+.theme-custom-casing {
+    background-color: #1a080a;
+    background-image: url('custom_casing.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #ff0033;
+    box-shadow: 
+        0 0 35px rgba(255, 0, 51, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing .controller-grip { background-color: transparent; }
+.theme-custom-casing .action-btn { background-color: #ff0033; color: #ffffff; border: 2px solid #111; text-shadow: 0 0 4px #fff; }
+.theme-custom-casing .action-btn:hover { background-color: #cc0029; }
+.theme-custom-casing .dpad-btn { background-color: #1a1a1a; border: 1px solid #ff0033; color: #ff0033; }
+.theme-custom-casing .analog-stick .stick-cap { background: radial-gradient(circle, #333 30%, #111 90%); border: 1px solid #ff0033; }
+
+/* --- Theme 6: Custom Red Tech Casing 2 (Honeycomb) --- */
+.theme-custom-casing-2 {
+    background-color: #1a080a;
+    background-image: url('custom_casing_2.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #ff0033;
+    box-shadow: 
+        0 0 35px rgba(255, 0, 51, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-2 .controller-grip { background-color: transparent; }
+.theme-custom-casing-2 .action-btn { background-color: #ff0033; color: #ffffff; border: 2px solid #111; text-shadow: 0 0 4px #fff; }
+.theme-custom-casing-2 .action-btn:hover { background-color: #cc0029; }
+.theme-custom-casing-2 .dpad-btn { background-color: #1a1a1a; border: 1px solid #ff0033; color: #ff0033; }
+.theme-custom-casing-2 .analog-stick .stick-cap { background: radial-gradient(circle, #333 30%, #111 90%); border: 1px solid #ff0033; }
+
+/* --- Theme 7: Custom Red Tech Casing 3 (Waves) --- */
+.theme-custom-casing-3 {
+    background-color: #1a080a;
+    background-image: url('custom_casing_3.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #ff0033;
+    box-shadow: 
+        0 0 35px rgba(255, 0, 51, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-3 .controller-grip { background-color: transparent; }
+.theme-custom-casing-3 .action-btn { background-color: #ff0033; color: #ffffff; border: 2px solid #111; text-shadow: 0 0 4px #fff; }
+.theme-custom-casing-3 .action-btn:hover { background-color: #cc0029; }
+.theme-custom-casing-3 .dpad-btn { background-color: #1a1a1a; border: 1px solid #ff0033; color: #ff0033; }
+.theme-custom-casing-3 .analog-stick .stick-cap { background: radial-gradient(circle, #333 30%, #111 90%); border: 1px solid #ff0033; }
+
+/* --- Theme 8: Custom Mario Casing --- */
+.theme-custom-casing-4 {
+    background-color: #e60012;
+    background-image: url('custom_casing_4.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #e60012;
+    box-shadow: 
+        0 0 35px rgba(230, 0, 18, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-4 .controller-grip { background-color: rgba(255, 255, 255, 0.05); backdrop-filter: blur(2px); }
+.theme-custom-casing-4 .action-btn.btn-a { background-color: #e60012; color: #fff; border: 2px solid #111; }
+.theme-custom-casing-4 .action-btn.btn-b { background-color: #f1c40f; color: #111; border: 2px solid #111; }
+.theme-custom-casing-4 .action-btn.btn-x { background-color: #007dd6; color: #fff; border: 2px solid #111; }
+.theme-custom-casing-4 .action-btn.btn-y { background-color: #2ecc71; color: #fff; border: 2px solid #111; }
+.theme-custom-casing-4 .dpad-btn { background-color: #f1c40f; border: 1px solid #e60012; color: #e60012; font-weight: bold; }
+.theme-custom-casing-4 .analog-stick .stick-cap { background: radial-gradient(circle, #e60012 30%, #a8000d 90%); border: 1px solid #fff; }
+
+/* --- Theme 9: Custom Blue Tech Casing 1 (Gold Frame) --- */
+.theme-custom-casing-5 {
+    background-color: #0e121c;
+    background-image: url('custom_casing_5.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #d4af37;
+    box-shadow: 
+        0 0 35px rgba(212, 175, 55, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-5 .controller-grip { background-color: transparent; }
+.theme-custom-casing-5 .action-btn { background-color: #1a1c23; color: #d4af37; border: 2px solid #d4af37; text-shadow: 0 0 4px #d4af37; }
+.theme-custom-casing-5 .action-btn:hover { background-color: #272a36; }
+.theme-custom-casing-5 .dpad-btn { background-color: #1a1c23; border: 1px solid #d4af37; color: #d4af37; }
+.theme-custom-casing-5 .analog-stick .stick-cap { background: radial-gradient(circle, #0e121c 30%, #05070a 90%); border: 1px solid #d4af37; }
+
+/* --- Theme 10: Custom Blue Tech Casing 2 (Waves Gold) --- */
+.theme-custom-casing-6 {
+    background-color: #0e121c;
+    background-image: url('custom_casing_6.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #d4af37;
+    box-shadow: 
+        0 0 35px rgba(212, 175, 55, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-6 .controller-grip { background-color: transparent; }
+.theme-custom-casing-6 .action-btn { background-color: #d4af37; color: #111; border: 2px solid #111; font-weight: bold; }
+.theme-custom-casing-6 .action-btn:hover { background-color: #bfa030; }
+.theme-custom-casing-6 .dpad-btn { background-color: #1a1c23; border: 1px solid #d4af37; color: #d4af37; }
+.theme-custom-casing-6 .analog-stick .stick-cap { background: radial-gradient(circle, #0e121c 30%, #05070a 90%); border: 1px solid #d4af37; }
+
+/* --- Theme 11: Custom Blue Tech Casing 3 (Neon Cubes) --- */
+.theme-custom-casing-7 {
+    background-color: #121214;
+    background-image: url('custom_casing_7.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #00f0ff;
+    box-shadow: 
+        0 0 35px rgba(0, 240, 255, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-7 .controller-grip { background-color: transparent; }
+.theme-custom-casing-7 .action-btn { background-color: #121214; color: #00f0ff; border: 2px solid #00f0ff; text-shadow: 0 0 4px #00f0ff; }
+.theme-custom-casing-7 .action-btn:hover { background-color: #1f1f24; }
+.theme-custom-casing-7 .dpad-btn { background-color: #121214; border: 2px solid #00f0ff; color: #00f0ff; }
+.theme-custom-casing-7 .analog-stick .stick-cap { background: radial-gradient(circle, #2d2d30 30%, #050505 90%); border: 1px solid #00f0ff; }
+
+/* --- Theme 12: Custom Zelda Casing (Hyrule Shield) --- */
+.theme-custom-casing-8 {
+    background-color: #004d80;
+    background-image: url('custom_casing_8.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #d4af37;
+    box-shadow: 
+        0 0 35px rgba(212, 175, 55, 0.35),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-8 .controller-grip { background-color: rgba(255, 255, 255, 0.05); backdrop-filter: blur(2px); }
+.theme-custom-casing-8 .action-btn { background-color: #00b0ff; color: #ffffff; border: 2px solid #d4af37; text-shadow: 0 0 4px #fff; }
+.theme-custom-casing-8 .action-btn:hover { background-color: #0081cb; }
+.theme-custom-casing-8 .dpad-btn { background-color: #d4af37; border: 1px solid #00b0ff; color: #00b0ff; font-weight: bold; }
+.theme-custom-casing-8 .analog-stick .stick-cap { background: radial-gradient(circle, #0081cb 30%, #004d80 90%); border: 1px solid #d4af37; }
+
+/* --- Theme 13: Custom Sticker Bomb Casing 1 --- */
+.theme-custom-casing-9 {
+    background-color: #111111;
+    background-image: url('custom_casing_9.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #000000;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-9 .controller-grip { background-color: rgba(0, 0, 0, 0.15); backdrop-filter: blur(1px); }
+.theme-custom-casing-9 .action-btn { background-color: #000000; color: #ffffff; border: 2px solid #ffffff; }
+.theme-custom-casing-9 .action-btn:hover { background-color: #222222; }
+.theme-custom-casing-9 .dpad-btn { background-color: #000000; border: 1px solid #ffffff; color: #ffffff; }
+.theme-custom-casing-9 .analog-stick .stick-cap { background: radial-gradient(circle, #333 30%, #111 90%); border: 1px solid #ffffff; }
+
+/* --- Theme 14: Custom Sticker Bomb Casing 2 --- */
+.theme-custom-casing-10 {
+    background-color: #ffffff;
+    background-image: url('custom_casing_10.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #ffffff;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-10 .controller-grip { background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(1px); }
+.theme-custom-casing-10 .action-btn { background-color: #ffffff; color: #ff0077; border: 2px solid #ff0077; font-weight: bold; }
+.theme-custom-casing-10 .action-btn:hover { background-color: #fce4ec; }
+.theme-custom-casing-10 .dpad-btn { background-color: #ffffff; border: 1px solid #ff0077; color: #ff0077; }
+.theme-custom-casing-10 .analog-stick .stick-cap { background: radial-gradient(circle, #ffffff 30%, #dddddd 90%); border: 1px solid #ff0077; }
+
+/* --- Theme 15: Custom Princess Peach Casing --- */
+.theme-custom-casing-11 {
+    background-color: #ff8fa3;
+    background-image: url('custom_casing_11.png');
+    background-size: cover;
+    background-position: center;
+    border: 5px solid #ff8fa3;
+    box-shadow: 
+        0 0 35px rgba(255, 143, 163, 0.4),
+        0 25px 50px rgba(0,0,0,0.85);
+}
+.theme-custom-casing-11 .controller-grip { background-color: rgba(255, 255, 255, 0.05); backdrop-filter: blur(1px); }
+.theme-custom-casing-11 .action-btn { background-color: #ff8fa3; color: #ffffff; border: 2px solid #ffffff; }
+.theme-custom-casing-11 .action-btn:hover { background-color: #ff758f; }
+.theme-custom-casing-11 .dpad-btn { background-color: #ffffff; border: 1px solid #ff8fa3; color: #ff8fa3; font-weight: bold; }
+.theme-custom-casing-11 .analog-stick .stick-cap { background: radial-gradient(circle, #7fecd7 30%, #46c8b2 90%); border: 1px solid #ff8fa3; }
+
+/* --- Controller Grips (Left / Right Sides) --- */
+.controller-grip {
+    flex: 0 0 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-top: 40px;
+    z-index: 10;
+}
+
+.grip-left { border-radius: 30px 0 0 30px; }
+.grip-right { border-radius: 0 30px 30px 0; }
+
+/* --- Triggers / Shoulder Buttons --- */
+.shoulder-btn {
+    position: absolute;
+    top: -10px;
+    background-color: #454a50;
+    color: #ccc;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px 10px 0 0;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.3);
+}
+.btn-l, .btn-r { width: 100px; height: 18px; top: -14px; }
+.btn-zl, .btn-zr { width: 70px; height: 14px; top: -24px; }
+
+.btn-l { left: 40px; border-radius: 20px 8px 0 0; }
+.btn-zl { left: 55px; border-radius: 12px 6px 0 0; }
+.btn-r { right: 40px; border-radius: 8px 20px 0 0; }
+.btn-zr { right: 55px; border-radius: 6px 12px 0 0; }
+
+/* --- Analog Sticks --- */
+.analog-stick {
+    width: 76px;
+    height: 76px;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.6), 0 2px 2px rgba(255,255,255,0.1);
+    margin-bottom: 30px;
+}
+
+.stick-cap {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 
+        0 4px 6px rgba(0,0,0,0.4), 
+        inset 0 2px 2px rgba(255,255,255,0.2),
+        inset 0 -2px 4px rgba(0,0,0,0.4);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.05s ease;
+}
+.stick-cap::after {
+    content: '';
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px dashed rgba(0,0,0,0.15);
+    top: 8px;
+    left: 8px;
+}
+
+/* --- D-Pad (Left Side) --- */
+.dpad {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.dpad-btn {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.3);
+}
+
+.dpad-up { top: 0; left: 34px; border-radius: 6px 6px 0 0; }
+.dpad-right { top: 34px; right: 0; border-radius: 0 6px 6px 0; }
+.dpad-down { bottom: 0; left: 34px; border-radius: 0 0 6px 6px; }
+.dpad-left { top: 34px; left: 0; border-radius: 6px 0 0 6px; }
+
+.dpad-center {
+    position: absolute;
+    top: 34px;
+    left: 34px;
+    width: 32px;
+    height: 32px;
+    background-color: #2e3033;
+    z-index: 2;
+}
+
+/* --- Action Buttons (Right Side A B X Y) --- */
+.action-buttons {
+    width: 110px;
+    height: 110px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.action-btn {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 
+        0 4px 6px rgba(0,0,0,0.4),
+        inset 0 1px 1px rgba(255,255,255,0.2);
+    transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.btn-x { top: 0; left: 38px; }
+.btn-a { top: 38px; right: 0; }
+.btn-b { bottom: 0; left: 38px; }
+.btn-y { top: 38px; left: 0; }
+
+.action-btn:active, .dpad-btn:active, .stick-cap:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Button keydown simulated visual effect */
+.action-btn.pressed, .dpad-btn.pressed {
+    transform: translateY(2px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    filter: brightness(0.8);
+}
+
+/* --- System Buttons (Minus / Plus / Capture / Home) --- */
+.system-btn {
+    position: absolute;
+    background-color: #222;
+    cursor: pointer;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.4);
+}
+
+.minus-btn { width: 18px; height: 6px; border-radius: 3px; top: 18px; right: 20px; }
+.plus-btn { width: 18px; height: 18px; border-radius: 3px; top: 18px; left: 20px; position: absolute; }
+.plus-btn::before {
+    content: '+';
+    color: #aaa;
+    font-size: 18px;
+    font-weight: 800;
+    position: absolute;
+    top: -5px;
+    left: 3px;
+}
+
+.capture-btn { width: 16px; height: 16px; border-radius: 3px; bottom: 40px; right: 20px; border: 1px solid #444; }
+
+.home-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    bottom: 36px;
+    left: 20px;
+    border: 2px solid #555;
+    background: radial-gradient(circle, #2d2f33 50%, #1e2022 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.home-btn::after {
+    content: '🏠';
+    font-size: 10px;
+    opacity: 0.6;
+}
+.home-btn:hover {
+    border-color: #00f0ff;
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+/* --- Status LED --- */
+.power-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00ff66; /* Power indicator */
+    position: absolute;
+    bottom: 15px;
+    right: 25px;
+    box-shadow: 0 0 6px #00ff66;
+    animation: ledPulse 2s infinite alternate;
+}
+
+@keyframes ledPulse {
+    from { opacity: 0.6; box-shadow: 0 0 2px #00ff66; }
+    to { opacity: 1.0; box-shadow: 0 0 8px #00ff66; }
+}
+
+.speaker-grille {
+    display: flex;
+    gap: 3px;
+    position: absolute;
+    bottom: 15px;
+    right: 50px;
+}
+.speaker-grille span {
+    width: 3px;
+    height: 12px;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 1.5px;
+}
+
+/* --- Center Screen Wrapper & Bezel --- */
+.screen-wrapper {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background-color: #141416; /* Black Bezel */
+    border-radius: 24px;
+    padding: 24px 34px 24px 34px;
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.8),
+        0 4px 8px rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border: 4px solid rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.screen-bezel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+}
+
+.bezel-logo {
+    text-align: center;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: #4e5359;
+    margin-bottom: 6px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* --- Inner LCD Screen content --- */
+.console-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #0b0b0d;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+}
+
+/* --- CRT & Glass overlays --- */
+.crt-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    pointer-events: none;
+    background: 
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+    background-size: 100% 4px, 6px 100%;
+}
+.crt-overlay::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: rgba(18, 16, 16, 0.1);
+    opacity: 0;
+    z-index: 101;
+    pointer-events: none;
+    animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+    0% { opacity: 0.18; }
+    50% { opacity: 0.22; }
+    100% { opacity: 0.18; }
+}
+
+.screen-glare {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 50%);
+    pointer-events: none;
+    z-index: 99;
+}
+
+/* --- Boot Terminal Overlay --- */
+.screen-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #020202;
+    z-index: 50;
+    padding: 15px;
+    overflow: hidden;
+}
+
+.terminal-content {
+    font-family: monospace;
+    font-size: 11px;
+    color: #39ff14; /* Neon green terminal */
+    line-height: 1.4;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-text {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: pre-line;
+}
+
+.boot-logo-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.boot-logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    animation: pulseLogo 1.5s infinite alternate;
+}
+
+@keyframes pulseLogo {
+    from { transform: scale(0.96); filter: brightness(0.9); }
+    to { transform: scale(1.02); filter: brightness(1.2); }
+}
+
+.pixel-art-logo {
+    font-size: 56px;
+    margin-bottom: 10px;
+}
+
+.boot-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+.boot-subtitle {
+    font-size: 10px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.boot-loader {
+    width: 140px;
+    height: 4px;
+    background-color: #222;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+.boot-loader::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 40%;
+    background-color: #39ff14;
+    animation: loaderBar 1.2s infinite linear;
+}
+
+@keyframes loaderBar {
+    from { left: -40%; }
+    to { left: 100%; }
+}
+
+/* --- OS Dashboard Screen --- */
+#dashboard-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(145deg, #12131a 0%, #08090d 100%);
+    animation: fadeIn 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Dynamic Character Backdrop */
+.character-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.backdrop-character {
+    position: absolute;
+    right: 50px;
+    bottom: -20px;
+    font-size: 260px;
+    opacity: 0.16;
+    user-select: none;
+    pointer-events: none;
+    filter: grayscale(30%) blur(1px);
+    animation: floatCharacter 4s infinite ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backdrop-image {
+    position: absolute;
+    right: 30px;
+    bottom: 15px;
+    width: 320px;
+    height: 240px;
+    object-fit: contain;
+    opacity: 0.14;
+    user-select: none;
+    pointer-events: none;
+    filter: grayscale(20%) blur(0.5px) drop-shadow(0 15px 20px rgba(0, 0, 0, 0.4));
+    animation: floatCharacter 4s infinite ease-in-out;
+}
+
+/* Top Status Info Bar (Switch Style) */
+.top-status-bar {
+    height: 38px;
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 12px;
+    color: #e0e0e0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    z-index: 5;
+}
+
+.status-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00f0ff, #ff0055);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+.profile-name {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-family: 'Outfit', sans-serif;
+}
+
+.status-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status-icon {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.status-time {
+    font-weight: 600;
+}
+
+.status-battery {
+    font-weight: 600;
+}
+
+.main-layout {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 3;
+}
+
+/* --- Content Panel & Sections --- */
+.content-panel {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.panel-section {
+    display: none;
+    height: 100%;
+    flex-direction: column;
+    padding: 16px 24px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.panel-section.active {
+    display: flex;
+    animation: slideUp 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 6px;
+    text-transform: uppercase;
+}
+
+/* --- HOME SECTION: System Select Carousel --- */
+.carousel-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.system-carousel {
+    display: flex;
+    gap: 16px;
+    padding: 20px 24px;
+    margin: -10px -24px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    width: calc(100% + 48px);
+    max-width: calc(100% + 48px);
+    box-sizing: border-box;
+}
+
+.system-carousel::-webkit-scrollbar {
+    display: none; /* Hide scrollbars on carousel for clean look */
+}
+
+.system-card {
+    flex: 0 0 135px;
+    height: 145px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.system-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.system-card-icon {
+    width: 80px;
+    height: 55px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    transition: transform 0.3s ease;
+}
+
+.system-card-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+.system-card-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.system-card-sub {
+    font-size: 9px;
+    color: #8a8d99;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.system-card:hover, .system-card.active {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 240, 255, 0.6);
+}
+
+.system-card:hover .system-card-icon {
+    transform: scale(1.1);
+}
+
+.system-card.active {
+    transform: scale(1.06) translateY(-5px);
+    border-color: #00f0ff;
+    box-shadow: 
+        0 12px 24px rgba(0, 240, 255, 0.25),
+        0 0 0 2px rgba(0, 240, 255, 0.2);
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(0, 240, 255, 0.04));
+}
+
+.system-card.active::before {
+    opacity: 1;
+}
+
+.system-details {
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border-left: 3px solid #00f0ff;
+    max-width: 450px;
+    margin-top: 5px;
+    animation: fadeIn 0.4s ease;
+}
+
+.system-full-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.system-game-count {
+    font-size: 11px;
+    color: #00f0ff;
+    margin-top: 2px;
+    font-weight: 600;
+}
+
+/* --- GAMES LIBRARY SECTION: Horizontal Game Cards --- */
+.library-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 8px;
+    min-width: 0;
+    overflow: visible;
+}
+
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 6px;
+    margin-bottom: 2px;
+}
+
+.library-header .section-title {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.system-badge-filter {
+    font-size: 10px;
+    font-weight: bold;
+    color: #0b0b0d;
+    background-color: #00f0ff;
+    padding: 3px 8px;
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0, 240, 255, 0.3);
+    text-transform: uppercase;
+}
+
+.games-horizontal-carousel {
+    display: flex;
+    gap: 16px;
+    padding: 20px 24px;
+    margin: -10px -24px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    flex: 1;
+    align-items: center;
+    width: calc(100% + 48px);
+    max-width: calc(100% + 48px);
+    box-sizing: border-box;
+}
+
+.games-horizontal-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.game-card {
+    flex: 0 0 115px;
+    height: 135px;
+    background-color: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card-icon {
+    font-size: 32px;
+    width: 52px;
+    height: 52px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+    transition: transform 0.3s ease;
+}
+
+.game-card-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #e0e0e0;
+    line-height: 1.25;
+    height: 36px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.game-card:hover, .game-card.active {
+    background-color: rgba(255,255,255,0.08);
+    border-color: rgba(0, 240, 255, 0.6);
+}
+
+.game-card:hover .game-card-icon {
+    transform: scale(1.08);
+}
+
+.game-card.active {
+    transform: scale(1.06) translateY(-5px);
+    border-color: #00f0ff;
+    box-shadow: 
+        0 12px 24px rgba(0, 240, 255, 0.25),
+        0 0 0 2px rgba(0, 240, 255, 0.2);
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(0, 240, 255, 0.04));
+}
+
+/* Game Details Bar (Switch style horizontal info row) */
+.game-details-bar {
+    height: 72px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: auto;
+    animation: fadeIn 0.4s ease;
+}
+
+.detail-text-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.detail-header-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2px;
+}
+
+.detail-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-tags {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tag-platform {
+    font-size: 8px;
+    font-weight: 800;
+    background-color: #e60012;
+    color: white;
+    padding: 1px 4px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.tag-genre {
+    font-size: 8px;
+    background-color: #455a64;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #cfd8dc;
+}
+
+.detail-desc {
+    font-size: 10px;
+    color: #8a8d99;
+    line-height: 1.35;
+    height: 27px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.launch-btn {
+    flex-shrink: 0;
+    width: 130px;
+    height: 38px;
+    background-color: #00f0ff;
+    color: #0b0b0d;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 240, 255, 0.35);
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.launch-btn:hover {
+    background-color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.4);
+}
+
+.launch-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- Bottom Quick Action Bar (Switch Home Menu Style) --- */
+.bottom-action-bar {
+    height: 52px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: relative;
+    z-index: 5;
+}
+
+.action-bar-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.nav-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-circle-icon {
+    font-size: 15px;
+    transition: transform 0.2s ease;
+}
+
+.nav-icon-wrapper:hover {
+    border-color: rgba(0, 240, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nav-icon-wrapper:hover .nav-circle-icon {
+    transform: scale(1.1);
+}
+
+.nav-icon-wrapper.active {
+    background-color: #00f0ff;
+    border-color: #00f0ff;
+    color: #0b0b0d;
+    transform: scale(1.1);
+    box-shadow: 
+        0 0 12px rgba(0, 240, 255, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.nav-icon-wrapper.active:hover {
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.action-bar-caption {
+    font-size: 12px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.control-hints {
+    display: flex;
+    gap: 12px;
+    font-size: 10px;
+    color: #8a8d99;
+    font-weight: 600;
+}
+
+.hint-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    background-color: #373a40;
+    color: #eee;
+    border-radius: 50%;
+    font-size: 8px;
+    font-weight: 800;
+    margin-right: 3px;
+    border: 1px solid #555;
+}
+
+/* --- Drag & Drop Zone --- */
+.upload-dropzone {
+    flex: 1;
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    transition: all 0.2s ease;
+    background-color: rgba(255,255,255,0.01);
+}
+
+.upload-dropzone.hovering {
+    border-color: #00f0ff;
+    background-color: rgba(0, 240, 255, 0.05);
+}
+
+.upload-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    animation: float 2s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.upload-text-primary {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+.upload-text-secondary {
+    font-size: 11px;
+    color: #6a6e7a;
+    margin-bottom: 12px;
+}
+.upload-or {
+    font-size: 10px;
+    color: #555;
+    margin-bottom: 12px;
+}
+.browse-btn {
+    background-color: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.browse-btn:hover {
+    background-color: rgba(255,255,255,0.15);
+}
+
+/* --- Settings Elements --- */
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 6px;
+}
+
+.settings-list::-webkit-scrollbar {
+    width: 4px;
+}
+.settings-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+}
+.settings-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+}
+.settings-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.settings-group-header {
+    font-size: 10px;
+    font-weight: 800;
+    color: #00f0ff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+    padding-bottom: 4px;
+}
+
+.offset-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.offset-val {
+    font-family: monospace;
+    font-size: 11px;
+    color: #00f0ff;
+    min-width: 45px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 10px 16px;
+}
+
+.setting-name {
+    font-size: 13px;
+    font-weight: bold;
+    color: #eee;
+}
+.setting-desc {
+    font-size: 10px;
+    color: #6a6e7a;
+    margin-top: 2px;
+}
+
+/* Switch styling */
+.switch-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+.switch-toggle input { opacity: 0; width: 0; height: 0; }
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #373a40;
+    transition: .3s;
+    border-radius: 11px;
+}
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+input:checked + .switch-slider { background-color: #00f0ff; }
+input:checked + .switch-slider:before { transform: translateX(22px); }
+
+.slider-control {
+    width: 120px;
+    -webkit-appearance: none;
+    height: 4px;
+    background: #373a40;
+    border-radius: 2px;
+}
+.slider-control::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #00f0ff;
+    cursor: pointer;
+}
+
+.select-control {
+    background-color: #222;
+    color: #eee;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    outline: none;
+}
+
+/* --- Gameplay screen container --- */
+#gameplay-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: #000;
+}
+#gameplay-screen iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Custom scrollbar for games list and panels */
+.games-list-container::-webkit-scrollbar,
+.content-panel::-webkit-scrollbar {
+    width: 6px;
+}
+.games-list-container::-webkit-scrollbar-track,
+.content-panel::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+.games-list-container::-webkit-scrollbar-thumb,
+.content-panel::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+.games-list-container::-webkit-scrollbar-thumb:hover,
+.content-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
