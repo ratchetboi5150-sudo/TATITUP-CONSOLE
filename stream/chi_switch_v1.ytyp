@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CMapTypes>
+  <extensions />
+  <archetypes>
+    <Item type="CBaseArchetypeDef">
+      <lodDist value="200.00000000" />
+      <flags value="32" />
+      <specialAttribute value="0" />
+      <bbMin x="-0.2" y="-0.1" z="-0.03" />
+      <bbMax x="0.2" y="0.1" z="0.03" />
+      <bsCentre x="0.0" y="0.0" z="0.0" />
+      <bsRadius value="0.25000000" />
+      <hdTextureDist value="60.00000000" />
+      <name>chi_switch_v1</name>
+      <textureDictionary>chi_switch_v1</textureDictionary>
+      <clipDictionary />
+      <assetType>ASSET_TYPE_DRAWABLE</assetType>
+      <assetName>chi_switch_v1</assetName>
+    </Item>
+  </archetypes>
+</CMapTypes>
